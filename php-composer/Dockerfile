@@ -25,19 +25,21 @@ RUN curl -L https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-insta
 
     # install php-build
     git clone https://github.com/php-build/php-build $HOME/.phpenv/plugins/php-build && \
-    echo 'export PATH="/root/.phpenv/bin:$PATH"' >> /root/.bashrc && \
-    echo 'eval "$(phpenv init -)"' >> /root/.bashrc && \
-    source /root/.bashrc && \
-    cp /root/.phpenv/plugins/php-build/share/php-build/default_configure_options /root/.phpenv/plugins/php-build/share/php-build/default_configure_options.org && \
-    sed -i -e '/^--with-mysql/d' /root/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
+    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> $HOME/.bashrc && \
+    echo 'eval "$(phpenv init -)"' >> $HOME/.bashrc && \
+    source $HOME/.bashrc && \
+    cp $HOME/.phpenv/plugins/php-build/share/php-build/default_configure_options $HOME/.phpenv/plugins/php-build/share/php-build/default_configure_options.org && \
+    sed -i -e '/^--with-mysql/d' $HOME/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
     ## for apache httpd
-    echo '--with-apxs2=/usr/bin/apxs' >> /root/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
-    echo '--enable-intl' >> /root/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
+    echo '--with-apxs2=/usr/bin/apxs' >> $HOME/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
+    echo '--enable-intl' >> $HOME/.phpenv/plugins/php-build/share/php-build/default_configure_options && \
 
     # install php
-    /root/.phpenv/bin/phpenv install $PHP_VERSION && \
-    /root/.phpenv/bin/phpenv global $PHP_VERSION && \
-    sed -e 's/;date.timezone =/date.timezone = "Asia\/Tokyo"/g' /root/.phpenv/versions/$PHP_VERSION/etc/php.ini && \
+    $HOME/.phpenv/bin/phpenv install $PHP_VERSION && \
+    $HOME/.phpenv/bin/phpenv global $PHP_VERSION && \
+    sed -e 's/;date.timezone =/date.timezone = "Asia\/Tokyo"/g' $HOME/.phpenv/versions/$PHP_VERSION/etc/php.ini && \
+    echo 'xdebug.remote_enable=1' >> $HOME/.phpenv/versions/7.1.4/etc/conf.d/xdebug.ini && \
+    echo 'xdebug.remote_autostart=1' >> $HOME/.phpenv/versions/7.1.4/etc/conf.d/xdebug.ini && \
 
     # install composer
     curl -sS https://getcomposer.org/installer | php && \
