@@ -7,7 +7,7 @@ ENV PROJECT=webapp
 RUN yum install -y epel-release && \
     yum update -y && \
     yum upgrade -y && \
-    yum install -y libxml2-devel openssl-devel \
+    yum install -y lsof libxml2-devel openssl-devel \
         curl-devel libjpeg-devel libpng-devel \
         libXpm-devel freetype-devel libmcrypt-devel \
         readline-devel libtidy-devel libxslt-devel \
@@ -20,8 +20,9 @@ RUN yum install -y epel-release && \
     yum clean all
 
 # install PHP and Composer
+RUN echo 'Install PHP and Composer' && \
     # install phpenv
-RUN curl -L https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-install.sh | sh && \
+    curl -L https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-install.sh | sh && \
 
     # install php-build
     git clone https://github.com/php-build/php-build $HOME/.phpenv/plugins/php-build && \
@@ -50,14 +51,23 @@ RUN curl -L https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-insta
     sed -i 's/#ServerName www.example.com:80/ServerName 127.0.0.1/' /etc/httpd/conf/httpd.conf && \
     sed -i '/<Directory \"\/var\/www\/html\">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf && \
     mkdir /var/www/html/$PROJECT && \
+    mkdir /root/bin && \
     mv /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/welcome.conf.org && \
+
+    # install rtail
+    npm install -g rtail && \
 
     # cleanup
     rm -rf /tmp/*
 
-COPY $PROJECT.conf /etc/httpd/conf.d/
+COPY config/$PROJECT.conf /etc/httpd/conf.d/
+COPY bin/init_laravel.sh /root/bin/
+COPY bin/start_rtail.sh /root/bin/
+
 
 WORKDIR /var/www/html/webapp/
 EXPOSE 80
+EXPOSE 443
 EXPOSE 9000
+EXPOSE 8888
 CMD /sbin/init
