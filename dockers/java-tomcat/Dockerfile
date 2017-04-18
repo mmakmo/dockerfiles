@@ -20,8 +20,6 @@ RUN echo 'install required packages' && \
     tar zxvf /tmp/tomcat-${TOMCAT8_VERSION}.tar.gz &&\
     mv ./apache-tomcat-${TOMCAT8_VERSION} /opt/ && \
     ln -s /opt/apache-tomcat-${TOMCAT8_VERSION} /opt/tomcat && \
-    # echo 'export CATALINA_HOME=/opt/tomcat'  >  /etc/profile.d/tomcat.sh && \
-    # source /etc/profile.d/tomcat.sh && \
 
     # install node.js and rtail
     curl --silent --location https://rpm.nodesource.com/setup_7.x | bash - && \
@@ -36,10 +34,10 @@ RUN echo 'install required packages' && \
     mkdir /root/bin && \
     rm -rf /tmp/*
 
-# COPY config/tomcat.service /etc/systemd/system/
-COPY bin/start_tomcat8.sh /root/bin/
+COPY bin/start_tomcat.sh /root/bin/
+COPY bin/restart_tomcat.sh /root/bin/
+COPY bin/start_jar.sh /root/bin/
 COPY bin/start_rtail.sh /root/bin/
-
 
 # for tomcat
 EXPOSE 80 443
