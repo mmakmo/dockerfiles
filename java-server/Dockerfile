@@ -28,4 +28,5 @@ RUN echo 'install required packages' && \
 EXPOSE 80
 EXPOSE 443
 EXPOSE 4711
+EXPOSE 8888
 CMD /sbin/init

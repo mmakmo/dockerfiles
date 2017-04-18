@@ -14,7 +14,7 @@ fi
 
 docker build . -t ${DOCKER_IMAGE_NAME}
 # run docker container
-docker run -d -v ${PROJECT_DIR}:/var/www/html/webapp -p 80:80 -p 9000:9000 -p 8888:8888 --name ${CONTAINER_NAME} ${DOCKER_IMAGE_NAME}  tail -f /dev/null
+docker run -d -v ${PROJECT_DIR}:/var/www/html/webapp -p 80:80 -p 9002:9000 -p 8881:8881 --name ${CONTAINER_NAME} ${DOCKER_IMAGE_NAME}  tail -f /dev/null
 #  @docker container
 docker exec ${CONTAINER_NAME} /root/bin/init_laravel.sh
 #  @docker container

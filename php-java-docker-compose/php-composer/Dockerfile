@@ -4,7 +4,8 @@ ENV PHP_VERSION=7.1.4
 ENV PROJECT=webapp
 
 # install required packages
-RUN yum install -y epel-release && \
+RUN echo 'install required packages' && \
+    yum install -y yum-fastestmirror epel-release && \
     yum update -y && \
     yum upgrade -y && \
     yum install -y lsof libxml2-devel openssl-devel \
@@ -66,8 +67,10 @@ COPY bin/start_rtail.sh /root/bin/
 
 
 WORKDIR /var/www/html/webapp/
-EXPOSE 80
-EXPOSE 443
+# for apache
+EXPOSE 80 443
+# for xdebug
 EXPOSE 9000
-EXPOSE 8888
+# for rtail
+EXPOSE 8881
 CMD /sbin/init
