@@ -1,0 +1,40 @@
+version: "3.2"
+
+services:
+
+  webapp:
+    build:
+      context: ./php-composer
+      dockerfile: Dockerfile
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    depends_on:
+      - javaapp
+    image: php-composer:tag
+    container_name: php-composer
+    ports:
+      - "80:80"
+      - "9001:9000"
+      - "8081:8081"
+    links:
+      - javaapp
+#    volumes:
+#     - .:/code
+  javaapp:
+    build:
+      context: ./java-tomcat
+      dockerfile: Dockerfile
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    image: java-tomcat:tag
+    container_name: java-tomcat
+    ports:
+      - "8080:8080"
+      - "9002:9000"
+      - "8082:8082"
+#    volumes:
+#     - .:/opt/
