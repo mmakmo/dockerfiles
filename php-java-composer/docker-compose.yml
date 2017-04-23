@@ -2,31 +2,52 @@ version: "3.2"
 
 services:
 
-  webapp:
+  proxy:
     build:
-      context: ../dockers/php-composer
+      context: ./dockerfiles/nginx-proxy
       dockerfile: Dockerfile
     entrypoint:
       - tail
       - -f
       - /dev/null
-    depends_on:
-      - javaapp
-    image: php-composer
-    container_name: php-composer
+    image: nginx-proxy
+    container_name: nginx-proxy
+    networks:
+      - private-network
     ports:
       - "80:80"
-      - "9001:9000"
-      - "8881:8881"
     environment:
       - TZ=Asia/Tokyo
-    links:
-      - javaapp
-#    volumes:
-#     - .:/code
+    volumes:
+      - ./logs:/root/logs
+      - ./src/spring/:/var/www/localhost/src/
+  
+  webapp:
+    build:
+      context: ./dockerfiles/php-composer
+      dockerfile: Dockerfile
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    image: php-composer:7.1.4
+    container_name: php-composer
+    networks:
+      - private-network
+    ports:
+      - "9001:9000"
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+     - ./src/laravel/:/var/www/html/webapp/
+     - ./logs/php-composer/PHP_Laravel.log:/var/log/laravel.log
+     - ./logs/php-composer/PHP_Access.log:/var/log/httpd/access_log
+     - ./logs/php-composer/PHP_Error.log:/var/log/httpd/error_log
+     - ./logs/php-composer/PHP_npm_compile.log:/var/log/npm_compile.log
+  
   javaapp:
     build:
-      context: ../dockers/java-tomcat
+      context: ./dockerfiles/java-tomcat
       dockerfile: Dockerfile
     entrypoint:
       - tail
@@ -34,11 +55,17 @@ services:
       - /dev/null
     image: java-tomcat
     container_name: java-tomcat
+    networks:
+      - private-network
     ports:
-      - "8080:8080"
       - "9002:9000"
-      - "8882:8882"
     environment:
       - TZ=Asia/Tokyo
-#    volumes:
-#     - .:/opt/
+    volumes:
+     - ./src/spring/:/opt/src/
+     - ./logs/java-tomcat/Java_build.log:/var/log/build.log
+     - ./logs/java-tomcat/Java_app.log:/var/log/javaapp.log
+
+networks:
+  private-network:
+    driver: bridge
