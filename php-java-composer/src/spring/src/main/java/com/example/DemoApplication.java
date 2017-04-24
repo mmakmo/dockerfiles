@@ -13,7 +13,7 @@ public class DemoApplication {
 
 	@RequestMapping("/")
 	String home() {
-		String aaa = "ssssssgggjgssssdsddssssssssaass";
+		String aaa = "ssssssgggjgssssdsddssssaass";
 		return "Hello World !";
 	}
 

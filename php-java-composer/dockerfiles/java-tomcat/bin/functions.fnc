@@ -10,5 +10,5 @@ function restart_jar {
 
 function build_jar {
     rm -rf /opt/src/build/libs/*
-    cd /opt/src && /opt/src/gradlew build generateJavadocs 2>> /var/log/build.log
+    cd /opt/src && /opt/src/gradlew clean build generateJavadocs 2>> /var/log/build.log
 }

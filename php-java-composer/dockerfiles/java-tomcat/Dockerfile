@@ -2,7 +2,7 @@ FROM centos:latest
 
 ENV HEAPSTATS_URL='http://icedtea.wildebeest.org/download/heapstats/heapstats-2.0.4/bin/agent/el7/x86_64/heapstats-2.0.4-0.el7.x86_64.rpm' \
     TOMCAT8_VERSION='8.5.14' \
-    TOMCAT8_URL='http://www-us.apache.org/dist/tomcat/tomcat-8' \
+    TOMCAT8_URL='http://www-us.apache.org/dist/tomcat/tomcat-8'
 #    DEBUG_PORT=8000
 
 # install required packages
@@ -11,7 +11,7 @@ RUN echo 'install required packages' && \
     yum update -y && \
     yum upgrade -y && \
     yum install --enablerepo=epel -y inotify-tools && \
-    yum install -y lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
+    yum install -y lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel php && \
         
     yum clean all && \
     echo 'export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")' >> /etc/bashrc && \
@@ -33,6 +33,7 @@ RUN echo 'install required packages' && \
     rm -rf /tmp/*
 
 COPY bin/* /root/bin/
+COPY contents/* /var/www/html/
 
 # for tomcat [80, 443, 8080]
 # for remote debug [8000]
