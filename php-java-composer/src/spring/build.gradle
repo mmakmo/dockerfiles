@@ -11,36 +11,54 @@ buildscript {
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
+plugins {
+	id 'java'
+//	id 'eclipse'
+	id "org.springframework.boot" version "1.5.3.RELEASE"
+	id "at.comm_unity.gradle.plugins.jpamodelgen" version "1.1.3"
+}
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 springBoot {
     executable = true
 }
 
 task generateJavadocs(type: Javadoc) {
-  source = sourceSets.main.allJava
+	source = sourceSets.main.allJava
+}
+
+jpaModelgen {
+	library = "org.hibernate:hibernate-jpamodelgen:5.2.10.Final"
+	jpaModelgenSourcesDir = "src/jpaModelgen/java"
+}
+
+
+bootRun {
+	jvmArgs '-XX:TieredStopAtLevel=1', '-Xverify:none'
 }
 
 repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	runtime('org.springframework.boot:spring-boot-devtools')
+
 	compile('com.h2database:h2:1.4.195')
-    compile('org.projectlombok:lombok:1.16.16')
     compile('org.flywaydb:flyway-core')
 
 	compile('io.springfox:springfox-core:2.6.1')
 	compile('io.springfox:springfox-swagger2:2.6.1')
 	compile('io.springfox:springfox-swagger-ui:2.6.1')
-	runtime('org.springframework.boot:spring-boot-devtools')
+
+    compile('org.projectlombok:lombok:1.16.16')
+	compile('org.apache.commons:commons-lang3:3.5')
+
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

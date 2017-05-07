@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.domain.table;
 
 import lombok.Getter;
 
@@ -6,29 +6,25 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class CategoryItem implements Serializable {
+@IdClass(CategoryKeys.class)
+public class Category implements Serializable {
 
     @Id
     @Getter
     @Column(name = "category_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer categoryId;
+    private int categoryId;
 
+    @Id
     @Getter
     @Column(name = "class_id", nullable = false)
-    private Integer classId;
+    private int classId;
 
     @Getter
     @Column(name = "item_id", nullable = false)
-    private Integer itemId;
-
-//    @Getter
-//    @OneToMany(mappedBy="category",targetEntity=Item.class,fetch= FetchType.EAGER)
-//    private Collection<Item> items;
-
+    private int itemId;
 
     @Getter
-    @ManyToOne(optional=false)
+    @ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinColumn(name="item_id", referencedColumnName="item_id", insertable=false, updatable=false)
     private Item item;
 

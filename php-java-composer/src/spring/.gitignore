@@ -1,1 +1,6 @@
 build
+bin
+.idea
+.settings
+src/jpaModelGen
+.gradle
