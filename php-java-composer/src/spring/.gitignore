@@ -3,5 +3,5 @@
 ./.idea
 ./.settings
 ./src/jpaModelGen
-./.gradle/
+./.gradle
 ./.classpath

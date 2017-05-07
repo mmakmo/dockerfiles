@@ -1,5 +1,5 @@
 src/spring/.classpath
-src/spring/.gradle/*
+src/spring/.gradle
 src/spring/bin
 src/spring/build
-src/spring/src/jpaModelgen/
+src/spring/src/jpaModelgen
